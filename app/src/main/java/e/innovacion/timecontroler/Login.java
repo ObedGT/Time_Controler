@@ -16,21 +16,21 @@ public class Login extends AsyncTask<Usuario, Void, Usuario> {
 
     @Override
     protected Usuario doInBackground(Usuario... datos) {
-        String sql = "select pk_login_name, password, nombre, apellido, fk_id_rol, activo from usuario where pk_login_name = '"+datos[0].getLoginName()+"' and password = '"+datos[0].getPassword() + "'";
+        String sql = "select login_name, pass, correo, nombre, apellido, id_estado, id_rol from usuario where login_name = '"+datos[0].getLoginName()+"' and password = '"+datos[0].getPassword() + "'";
         String host = "192.168.43.120";
         String port = "3306";
-        String dbName = "uvgmoviles";
+        String dbName = "uvgproyecto";
         String userName = "root";
         String password = "admon";
         try{
-            conexionMySql = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + dbName, userName, password);
+            conexionMySql = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + dbName + userName + password);
             st = conexionMySql.createStatement();
             rs = st.executeQuery(sql);
             if(rs.first())
             {
                 do
                 {
-                    columnas = new Usuario(rs.getString("pk_login_name"), rs.getString("password"), rs.getString("nombre"), rs.getString("apellido"), rs.getInt("fk_id_rol"), rs.getInt("activo"));
+                    columnas = new Usuario(rs.getString("login_name"), rs.getString("pass"), rs.getString("correo"), rs.getString("nombre"), rs.getString("apellido"),rs.getInt("id_estado"), rs.getInt("id_rol"));
                 }while(rs.next());
             }
         } catch (SQLException ex) {

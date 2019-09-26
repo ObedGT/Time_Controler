@@ -20,7 +20,7 @@ public class Usuario {
     }
 
     //Constructor sin parametros
-    public Usuario() {
+    public Usuario(String login_name, String pass, String correo, String nombre, String apellido, int id_estado, int id_rol) {
 
     }
 

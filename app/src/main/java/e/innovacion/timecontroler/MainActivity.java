@@ -2,17 +2,23 @@ package e.innovacion.timecontroler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private EditText txtUsuario;
     private EditText txtPassword;
-    private Button btnIngresar;
+    private Button btnLogin;
     private ArrayList<Usuario> usuario = null;
 
     @Override
@@ -23,9 +29,9 @@ public class MainActivity extends AppCompatActivity {
 
         txtUsuario = (EditText) findViewById(R.id.txtUsuario);
         txtPassword = (EditText) findViewById(R.id.txtPass);
-        btnIngresar = (Button) findViewById(R.id.btnLogin);
+        btnLogin = (Button) findViewById(R.id.btnLogin);
 
-        btnIngresar.setOnClickListener(new View.OnClickListener() {
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent navegacion = new Intent(MainActivity.this, Menu.class);
@@ -56,9 +62,28 @@ public class MainActivity extends AppCompatActivity {
     //Funcion que establece la conexion con la base de datos y retorna un objeto de tipo usuario
     public Usuario validarLogin(){
         //Variable que almacenará el resultado de la consulta
+
         Usuario usuario = null;
+        try {
+            Connection conn;
+            Conexion conexion = new Conexion();
+            conn = conexion.connect();
+            Statement st = conn.createStatement();
+            String sql="select login_name, pass, correo, nombre, apellido, id_estado, id_rol from usuario where login_name = '"+txtUsuario.getText().toString()  +"' and password = '"+txtPassword.getText().toString() + "'";
+            ResultSet rs = st.executeQuery(sql);
+            if(rs.first())
+            {
+                do
+                {
+                    usuario = new Usuario(rs.getString("pk_loginName"), rs.getString("password"), rs.getString("nombre"), rs.getString("apellido"), rs.getInt("fk_rol"), rs.getInt("activo"));
+                }while(rs.next());
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
         //Asignamos el driver de conexion
-        String driver = "com.mysql.jdbc.Driver";
+        /*String driver = "com.mysql.jdbc.Driver";
         try{
             //Cargamos el driver con el conector jdbc
             Class.forName(driver).newInstance();
@@ -67,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         } catch(Exception ex){
             Toast.makeText(MainActivity.this, "Error al conectarse a la BD" + ex.getMessage(), Toast.LENGTH_LONG).show();
         }
+        */
         return usuario;
     }
 }

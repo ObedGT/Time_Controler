@@ -1,42 +1,84 @@
 package e.innovacion.timecontroler;
 
-import android.os.AsyncTask;
-import android.util.Log;
+
+import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+
 import java.sql.SQLException;
 
-public class Conexion extends AsyncTask<String, Void, Boolean>{
-    //Atributos de la conexion
-    public Connection conexionMySQL;
-    boolean estadoConexion = false;
+public class Conexion {
+    //Atributos de la clase
+    private String host = "192.168.1.9";
+    private String port = "3306";
+    private String userName = "root";
+    private String password = "admon";
+    private String dbName = "seguridadinformatica";
 
-    @Override
-    protected Boolean doInBackground(String... datos) {
-        //Declaramos las variables con los parametros de conexión recibidos
-        String host = "192.168.1.9";
-        String port = "3306";
-        String dbName = "uvgmoviles";
-        String userName = "root";
-        String password = "admon";
-        try{
-            conexionMySQL = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + dbName, userName, password);
-            if(!conexionMySQL.isClosed()){
-                estadoConexion = true;
-            }
-        } catch (SQLException ex) {
-            Log.d("Tarea asincrona", ex.getMessage());
+    //Metodo que obtiene la conexion a la base de datos
+    public Connection connect() throws ConnectException, SQLException {
+        Connection conn;
+        try {
+            // Creamos la conexión
+            Class.forName("com.mysql.jdbc.Driver");
+            String url = "jdbc:mysql://" + host + ":" + port + "/" + dbName;
+            conn = DriverManager.getConnection(url, userName, password);
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            return null;
         }
-        if(estadoConexion == false) {
+        return conn;
+    }
+
+    //Metodo que cierra una conexion a la base de datos
+    public void disconnect(Connection conn) {
+        if (conn != null) {
             try {
-                if (conexionMySQL != null) {
-                    conexionMySQL.close();
-                }
+                conn.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
+    }
 
-        return estadoConexion;
+    //Metodos gets y sets
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getDbName() {
+        return dbName;
+    }
+
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
     }
 }
