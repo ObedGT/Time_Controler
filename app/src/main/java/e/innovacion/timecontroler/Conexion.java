@@ -4,26 +4,28 @@ package e.innovacion.timecontroler;
 import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-
 import java.sql.SQLException;
 
 public class Conexion {
     //Atributos de la clase
-    private String host = "192.168.1.9";
+    private Connection conn = null;
+
+    private String host = "127.0.0.1";
     private String port = "3306";
     private String userName = "root";
     private String password = "admon";
-    private String dbName = "seguridadinformatica";
+    private String dbName = "timecontroler";
 
     //Metodo que obtiene la conexion a la base de datos
     public Connection connect() throws ConnectException, SQLException {
-        Connection conn;
+
         try {
             // Creamos la conexión
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
             String url = "jdbc:mysql://" + host + ":" + port + "/" + dbName;
             conn = DriverManager.getConnection(url, userName, password);
-        } catch (ClassNotFoundException | SQLException e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             return null;
         }
