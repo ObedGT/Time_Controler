@@ -64,7 +64,9 @@ public class MainActivity extends AppCompatActivity {
         //Variable que almacenará el resultado de la consulta
 
         Usuario usuario = null;
+
         try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
             Connection conn;
             Conexion conexion = new Conexion();
             conn = conexion.connect();
@@ -82,8 +84,9 @@ public class MainActivity extends AppCompatActivity {
         catch (Exception ex) {
             ex.printStackTrace();
         }
+        /*
         //Asignamos el driver de conexion
-        /*String driver = "com.mysql.jdbc.Driver";
+        String driver = "com.mysql.jdbc.Driver";
         try{
             //Cargamos el driver con el conector jdbc
             Class.forName(driver).newInstance();
@@ -93,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Error al conectarse a la BD" + ex.getMessage(), Toast.LENGTH_LONG).show();
         }
         */
+
         return usuario;
     }
 }

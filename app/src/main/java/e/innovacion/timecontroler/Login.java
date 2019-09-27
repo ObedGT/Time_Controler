@@ -13,17 +13,22 @@ public class Login extends AsyncTask<Usuario, Void, Usuario> {
     private Statement st = null;
     private ResultSet rs = null;
     private Usuario columnas = null;
+    private int pruebayerror = 0;
 
     @Override
     protected Usuario doInBackground(Usuario... datos) {
         String sql = "select login_name, pass, correo, nombre, apellido, id_estado, id_rol from usuario where login_name = '"+datos[0].getLoginName()+"' and password = '"+datos[0].getPassword() + "'";
-        String host = "192.168.43.120";
+        String host = "192.168.1.9";
         String port = "3306";
-        String dbName = "uvgproyecto";
+        String dbName = "uvgmoviles";
         String userName = "root";
         String password = "admon";
         try{
             conexionMySql = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + dbName + userName + password);
+
+            pruebayerror=2+2;
+            pruebayerror+=5*0;
+
             st = conexionMySql.createStatement();
             rs = st.executeQuery(sql);
             if(rs.first())

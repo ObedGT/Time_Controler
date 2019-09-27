@@ -10,18 +10,18 @@ public class Conexion {
     //Atributos de la clase
     private Connection conn = null;
 
-    private String host = "127.0.0.1";
+    private String host = "192.168.1.9";
     private String port = "3306";
     private String userName = "root";
     private String password = "admon";
     private String dbName = "timecontroler";
 
     //Metodo que obtiene la conexion a la base de datos
-    public Connection connect() throws ConnectException, SQLException {
+    public Connection connect(){
 
         try {
             // Creamos la conexión
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
+
             String url = "jdbc:mysql://" + host + ":" + port + "/" + dbName;
             conn = DriverManager.getConnection(url, userName, password);
         }
